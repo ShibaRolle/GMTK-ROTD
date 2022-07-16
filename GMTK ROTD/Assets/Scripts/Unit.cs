@@ -9,12 +9,11 @@ public class Unit : MonoBehaviour
     Animator animator;
 
     private Vector3 targetPosition;
+
     float stoppingDistance = .1f;
     private int runHash;
 
-    
-
-    
+    private GridPosition gridPosition;
 
     private void Awake()
     {
@@ -25,8 +24,15 @@ public class Unit : MonoBehaviour
        
     }
 
+    private void Start()
+    {
+        gridPosition = levelGrid.Instance.GetGridPosition(transform.position);
+        levelGrid.Instance.AddUnitAtGridPosition(gridPosition, this);
+    }
+
     private void Update()
     {
+
         if (Vector3.Distance(transform.position, targetPosition) > stoppingDistance)
         {
             animator.SetBool(runHash, true);
@@ -42,6 +48,14 @@ public class Unit : MonoBehaviour
         {
             animator.SetBool(runHash, false);
 
+        }
+
+        GridPosition newGridPosition = levelGrid.Instance.GetGridPosition(transform.position);
+
+        if (newGridPosition != gridPosition)
+        {
+            levelGrid.Instance.UnitMovedGridPosition(this, gridPosition, newGridPosition);
+            gridPosition = newGridPosition;
         }
 
     }
