@@ -130,7 +130,7 @@
                     "name": "Zoom",
                     "type": "Value",
                     "id": "77d705bc-0e15-488c-b26c-f5101878949a",
-                    "expectedControlType": "Axis",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -151,7 +151,7 @@
                 {
                     "name": "",
                     "id": "485b6170-d339-44af-819d-c2526fcc6c17",
-                    "path": "<Mouse>/scroll/y",
+                    "path": "<Mouse>/scroll",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

@@ -8,7 +8,7 @@ public class CinemachineVcam : MonoBehaviour
     private InputMaster playerInputActions;
     private int lookspeed;
 
-    private bool moveCam;
+   
 
     private CinemachineVirtualCamera cinemachineVirtualCamera;
 
@@ -57,8 +57,7 @@ public class CinemachineVcam : MonoBehaviour
 
     private void Update()
     {
-        if (moveCam)
-        {
+     
             if (newPosition.x >= 85)
             {
                 newPosition.x = 85;
@@ -68,16 +67,10 @@ public class CinemachineVcam : MonoBehaviour
             {
                 newPosition.x = -50;
             }
-
-
-
-
-
             newPosition.y += camLook.x;
-            newPosition.x += -camLook.y;
+            
             transform.localRotation = Quaternion.Euler(newPosition);
-        }
-       
+      
 
         HandleZoom();
     }
@@ -93,15 +86,7 @@ public class CinemachineVcam : MonoBehaviour
 
      void RightClick(InputAction.CallbackContext context)
     {
-        if (context.performed) 
-        { 
-            moveCam = true; 
-        }
-        else
-        {
-            moveCam = false;
-        }
-        
+
     }
     void HandleZoom()
     {

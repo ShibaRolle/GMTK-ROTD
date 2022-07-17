@@ -50,14 +50,8 @@ public class CameraController : MonoBehaviour
 
     private void OnWASD(InputAction.CallbackContext context)
     {
-        if (context.performed)
-        {
-            inputAxis = context.ReadValue<Vector2>();
-        }
-        if (context.canceled)
-        {
-            inputAxis = new Vector2(0,0);
-        }
+        
+        inputAxis = context.ReadValue<Vector2>();
         moveDir.x = inputAxis.x;
         moveDir.y = 0f;
         moveDir.z = inputAxis.y;
