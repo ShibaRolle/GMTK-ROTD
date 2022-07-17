@@ -6,11 +6,12 @@ using UnityEngine.InputSystem;
 public class CinemachineVcam : MonoBehaviour
 {
     private InputMaster playerInputActions;
-    private int lookspeed;
 
-   
+    private bool moveCam;
 
     private CinemachineVirtualCamera cinemachineVirtualCamera;
+
+    [field: SerializeField] private InputReader input;
 
     Vector2 camLook;
     Vector3 camZoom;
@@ -18,8 +19,8 @@ public class CinemachineVcam : MonoBehaviour
 
     private void Awake()
     {
-        
-        
+        input.RightClickEvent += rightclick;
+        input.RightClickEventCanceled += rightclickcancel;
         playerInputActions = new InputMaster();
 
         Camera.main.gameObject.TryGetComponent<CinemachineBrain>(out var brain);
@@ -49,28 +50,30 @@ public class CinemachineVcam : MonoBehaviour
         {
             OnCamZoomInput(ctx);
         };
-        playerInputActions.PlayerInputs.RightClick.started += context =>
-        {
-            RightClick(context);
-        };
+     
     }
 
     private void Update()
     {
-     
+
+        if (moveCam)
+        {
+            newPosition.y += camLook.x;
+            newPosition.x += -camLook.y;
+
             if (newPosition.x >= 85)
             {
                 newPosition.x = 85;
             }
 
-            if (newPosition.x <= -50)
+            if (newPosition.x <= 12)
             {
-                newPosition.x = -50;
+                newPosition.x = 12;
             }
-            newPosition.y += camLook.x;
+
             
             transform.localRotation = Quaternion.Euler(newPosition);
-      
+        }
 
         HandleZoom();
     }
@@ -84,10 +87,15 @@ public class CinemachineVcam : MonoBehaviour
         camZoom = context.ReadValue<Vector2>();
     }
 
-     void RightClick(InputAction.CallbackContext context)
+    private void rightclick()
     {
-
+        moveCam = true;
     }
+    private void rightclickcancel()
+    {
+        moveCam = false;
+    }
+
     void HandleZoom()
     {
         CinemachineComponentBase componentBase = cinemachineVirtualCamera.GetCinemachineComponent(CinemachineCore.Stage.Body);

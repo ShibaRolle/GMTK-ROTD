@@ -8,6 +8,9 @@ public class CameraController : MonoBehaviour
     Vector2 inputAxis;
     Vector3 moveDir;
 
+   
+
+    [SerializeField] private CharacterController controller;
     
     private float moveSpeed = 10f;
 
@@ -16,7 +19,7 @@ public class CameraController : MonoBehaviour
     InputMaster input;
 
     private float turnSmoothVelocity;
-    private float rotationFactorPerFrame;
+    private float rotationFactorPerFrame = .1f;
 
     private void Awake()
     {
@@ -34,17 +37,30 @@ public class CameraController : MonoBehaviour
 
     private void Start()
     {
+        controller = GetComponent<CharacterController>();
         cam = Camera.main.transform;
-        Vector3 camF = cam.forward.normalized;
-        Vector3 camR = cam.right.normalized;
+        
     }
     // Start is called before the first frame update
     private void Update()
     {
+        var forward = cam.transform.forward;
+        var right = cam.transform.right;
 
-        HandleRotation();
-        transform.position += moveDir * moveSpeed * Time.deltaTime;
-        
+        //project forward and right vectors on the horizontal plane (y = 0)
+        forward.y = 0f;
+        right.y = 0f;
+        forward.Normalize();
+        right.Normalize();
+
+        //this is the direction in the world space we want to move:
+        var desiredMoveDirection = forward * inputAxis.y + right * inputAxis.x;
+
+        //now we can apply the movement:
+        transform.Translate(desiredMoveDirection * moveSpeed * Time.deltaTime);
+
+        //HandleRotation();
+      
 
     }
 
@@ -60,6 +76,10 @@ public class CameraController : MonoBehaviour
 
     private void HandleRotation()
     {
+       
+
+        
+
         Vector3 positionToLookAt = new Vector3(inputAxis.x, 0f, inputAxis.y);
 
         float targetAngle = Mathf.Atan2(positionToLookAt.x, positionToLookAt.z) * Mathf.Rad2Deg + cam.eulerAngles.y;

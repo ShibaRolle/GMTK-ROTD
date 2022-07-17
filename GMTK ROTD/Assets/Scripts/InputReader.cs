@@ -12,6 +12,7 @@ public class InputReader : MonoBehaviour, InputMaster.IPlayerInputsActions
 
     public event Action LeftClickEvent;
     public event Action RightClickEvent;
+    public event Action RightClickEventCanceled;
 
     private void Start()
     {
@@ -39,6 +40,14 @@ public class InputReader : MonoBehaviour, InputMaster.IPlayerInputsActions
         if (!context.performed) { return; }
 
         RightClickEvent?.Invoke();
+    }
+
+    public void OnRightClickCancel(InputAction.CallbackContext context)
+    {
+
+        if (!context.canceled) { return; }
+
+        RightClickEventCanceled?.Invoke();
     }
 
     public void OnWASD(InputAction.CallbackContext context)

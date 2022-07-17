@@ -5,23 +5,13 @@ using UnityEngine.InputSystem;
 
 public class Unit : MonoBehaviour
 {
-
-    Animator animator;
-
-    private Vector3 targetPosition;
-
-    float stoppingDistance = .1f;
-    private int runHash;
+    private MoveAction moveAction;
 
     private GridPosition gridPosition;
 
     private void Awake()
     {
-        targetPosition = transform.position;
-
-        runHash = Animator.StringToHash("isWalking");
-        animator = GetComponent<Animator>();
-       
+        moveAction = GetComponent<MoveAction>();
     }
 
     private void Start()
@@ -33,23 +23,6 @@ public class Unit : MonoBehaviour
     private void Update()
     {
 
-        if (Vector3.Distance(transform.position, targetPosition) > stoppingDistance)
-        {
-            animator.SetBool(runHash, true);
-            Vector3 moveDirection = (targetPosition - transform.position).normalized;
-            float MoveSpeed = 4f;
-            transform.position += moveDirection * MoveSpeed * Time.deltaTime;
-
-            float rotateSpeed = 10f;
-
-            transform.forward = Vector3.Lerp(transform.forward, moveDirection, rotateSpeed * Time.deltaTime);
-        }
-        else
-        {
-            animator.SetBool(runHash, false);
-
-        }
-
         GridPosition newGridPosition = levelGrid.Instance.GetGridPosition(transform.position);
 
         if (newGridPosition != gridPosition)
@@ -60,9 +33,13 @@ public class Unit : MonoBehaviour
 
     }
 
-    public void Move(Vector3 targetPosition)
+    public MoveAction GetMoveAction()
     {
-        this.targetPosition = targetPosition;
+        return moveAction;
     }
 
+    public GridPosition GetGridPosition()
+    {
+        return gridPosition;
+    }
 }

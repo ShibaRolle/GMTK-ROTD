@@ -31,6 +31,15 @@
                     "processors": "NormalizeVector2",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "RightClickCancel",
+                    "type": "Button",
+                    "id": "e84d453a-140e-4a36-9bed-99d01be6d576",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -110,6 +119,17 @@
                     "action": "WASD",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "844b9cd8-3ef4-4ade-98f7-0afe7862f78e",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "Press(behavior=1)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightClickCancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },

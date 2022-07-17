@@ -53,6 +53,15 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                     ""processors"": ""NormalizeVector2"",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""RightClickCancel"",
+                    ""type"": ""Button"",
+                    ""id"": ""e84d453a-140e-4a36-9bed-99d01be6d576"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -132,6 +141,17 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                     ""action"": ""WASD"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""844b9cd8-3ef4-4ade-98f7-0afe7862f78e"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RightClickCancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -191,6 +211,7 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
         m_PlayerInputs_LeftClick = m_PlayerInputs.FindAction("LeftClick", throwIfNotFound: true);
         m_PlayerInputs_RightClick = m_PlayerInputs.FindAction("RightClick", throwIfNotFound: true);
         m_PlayerInputs_WASD = m_PlayerInputs.FindAction("WASD", throwIfNotFound: true);
+        m_PlayerInputs_RightClickCancel = m_PlayerInputs.FindAction("RightClickCancel", throwIfNotFound: true);
         // Look
         m_Look = asset.FindActionMap("Look", throwIfNotFound: true);
         m_Look_Mouse = m_Look.FindAction("Mouse", throwIfNotFound: true);
@@ -257,6 +278,7 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerInputs_LeftClick;
     private readonly InputAction m_PlayerInputs_RightClick;
     private readonly InputAction m_PlayerInputs_WASD;
+    private readonly InputAction m_PlayerInputs_RightClickCancel;
     public struct PlayerInputsActions
     {
         private @InputMaster m_Wrapper;
@@ -264,6 +286,7 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
         public InputAction @LeftClick => m_Wrapper.m_PlayerInputs_LeftClick;
         public InputAction @RightClick => m_Wrapper.m_PlayerInputs_RightClick;
         public InputAction @WASD => m_Wrapper.m_PlayerInputs_WASD;
+        public InputAction @RightClickCancel => m_Wrapper.m_PlayerInputs_RightClickCancel;
         public InputActionMap Get() { return m_Wrapper.m_PlayerInputs; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -282,6 +305,9 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                 @WASD.started -= m_Wrapper.m_PlayerInputsActionsCallbackInterface.OnWASD;
                 @WASD.performed -= m_Wrapper.m_PlayerInputsActionsCallbackInterface.OnWASD;
                 @WASD.canceled -= m_Wrapper.m_PlayerInputsActionsCallbackInterface.OnWASD;
+                @RightClickCancel.started -= m_Wrapper.m_PlayerInputsActionsCallbackInterface.OnRightClickCancel;
+                @RightClickCancel.performed -= m_Wrapper.m_PlayerInputsActionsCallbackInterface.OnRightClickCancel;
+                @RightClickCancel.canceled -= m_Wrapper.m_PlayerInputsActionsCallbackInterface.OnRightClickCancel;
             }
             m_Wrapper.m_PlayerInputsActionsCallbackInterface = instance;
             if (instance != null)
@@ -295,6 +321,9 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                 @WASD.started += instance.OnWASD;
                 @WASD.performed += instance.OnWASD;
                 @WASD.canceled += instance.OnWASD;
+                @RightClickCancel.started += instance.OnRightClickCancel;
+                @RightClickCancel.performed += instance.OnRightClickCancel;
+                @RightClickCancel.canceled += instance.OnRightClickCancel;
             }
         }
     }
@@ -345,6 +374,7 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
         void OnLeftClick(InputAction.CallbackContext context);
         void OnRightClick(InputAction.CallbackContext context);
         void OnWASD(InputAction.CallbackContext context);
+        void OnRightClickCancel(InputAction.CallbackContext context);
     }
     public interface ILookActions
     {
