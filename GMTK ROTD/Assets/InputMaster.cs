@@ -44,6 +44,15 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""WASD"",
+                    ""type"": ""Value"",
+                    ""id"": ""b57ceeea-6d48-4713-99ac-040f0fd708c1"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": ""NormalizeVector2"",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -68,6 +77,109 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                     ""action"": ""RightClick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""024db3a6-4cad-4fad-8d64-620d1b830661"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WASD"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""e6b04130-0472-4ab9-919f-b683a5fc2462"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WASD"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""5842f4b4-6820-4599-9ca4-4797a0125e74"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WASD"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""eeb8b060-f5be-4fc7-b038-f6991977f4e6"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WASD"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""e30fd4a7-47b4-41fb-b623-ccb13ee2fbbd"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WASD"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
+        },
+        {
+            ""name"": ""Look"",
+            ""id"": ""4d6f9506-4dcd-4e85-b62c-0e79b5758be6"",
+            ""actions"": [
+                {
+                    ""name"": ""Mouse"",
+                    ""type"": ""Value"",
+                    ""id"": ""753c640a-510e-44ad-9179-5d63784eb795"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Zoom"",
+                    ""type"": ""Value"",
+                    ""id"": ""77d705bc-0e15-488c-b26c-f5101878949a"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""0a58b6b7-a2aa-46e5-9574-1f3f392b33e7"",
+                    ""path"": ""<Mouse>/Delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Mouse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""485b6170-d339-44af-819d-c2526fcc6c17"",
+                    ""path"": ""<Mouse>/scroll/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -78,6 +190,11 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
         m_PlayerInputs = asset.FindActionMap("PlayerInputs", throwIfNotFound: true);
         m_PlayerInputs_LeftClick = m_PlayerInputs.FindAction("LeftClick", throwIfNotFound: true);
         m_PlayerInputs_RightClick = m_PlayerInputs.FindAction("RightClick", throwIfNotFound: true);
+        m_PlayerInputs_WASD = m_PlayerInputs.FindAction("WASD", throwIfNotFound: true);
+        // Look
+        m_Look = asset.FindActionMap("Look", throwIfNotFound: true);
+        m_Look_Mouse = m_Look.FindAction("Mouse", throwIfNotFound: true);
+        m_Look_Zoom = m_Look.FindAction("Zoom", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -139,12 +256,14 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
     private IPlayerInputsActions m_PlayerInputsActionsCallbackInterface;
     private readonly InputAction m_PlayerInputs_LeftClick;
     private readonly InputAction m_PlayerInputs_RightClick;
+    private readonly InputAction m_PlayerInputs_WASD;
     public struct PlayerInputsActions
     {
         private @InputMaster m_Wrapper;
         public PlayerInputsActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
         public InputAction @LeftClick => m_Wrapper.m_PlayerInputs_LeftClick;
         public InputAction @RightClick => m_Wrapper.m_PlayerInputs_RightClick;
+        public InputAction @WASD => m_Wrapper.m_PlayerInputs_WASD;
         public InputActionMap Get() { return m_Wrapper.m_PlayerInputs; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -160,6 +279,9 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                 @RightClick.started -= m_Wrapper.m_PlayerInputsActionsCallbackInterface.OnRightClick;
                 @RightClick.performed -= m_Wrapper.m_PlayerInputsActionsCallbackInterface.OnRightClick;
                 @RightClick.canceled -= m_Wrapper.m_PlayerInputsActionsCallbackInterface.OnRightClick;
+                @WASD.started -= m_Wrapper.m_PlayerInputsActionsCallbackInterface.OnWASD;
+                @WASD.performed -= m_Wrapper.m_PlayerInputsActionsCallbackInterface.OnWASD;
+                @WASD.canceled -= m_Wrapper.m_PlayerInputsActionsCallbackInterface.OnWASD;
             }
             m_Wrapper.m_PlayerInputsActionsCallbackInterface = instance;
             if (instance != null)
@@ -170,13 +292,63 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                 @RightClick.started += instance.OnRightClick;
                 @RightClick.performed += instance.OnRightClick;
                 @RightClick.canceled += instance.OnRightClick;
+                @WASD.started += instance.OnWASD;
+                @WASD.performed += instance.OnWASD;
+                @WASD.canceled += instance.OnWASD;
             }
         }
     }
     public PlayerInputsActions @PlayerInputs => new PlayerInputsActions(this);
+
+    // Look
+    private readonly InputActionMap m_Look;
+    private ILookActions m_LookActionsCallbackInterface;
+    private readonly InputAction m_Look_Mouse;
+    private readonly InputAction m_Look_Zoom;
+    public struct LookActions
+    {
+        private @InputMaster m_Wrapper;
+        public LookActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Mouse => m_Wrapper.m_Look_Mouse;
+        public InputAction @Zoom => m_Wrapper.m_Look_Zoom;
+        public InputActionMap Get() { return m_Wrapper.m_Look; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(LookActions set) { return set.Get(); }
+        public void SetCallbacks(ILookActions instance)
+        {
+            if (m_Wrapper.m_LookActionsCallbackInterface != null)
+            {
+                @Mouse.started -= m_Wrapper.m_LookActionsCallbackInterface.OnMouse;
+                @Mouse.performed -= m_Wrapper.m_LookActionsCallbackInterface.OnMouse;
+                @Mouse.canceled -= m_Wrapper.m_LookActionsCallbackInterface.OnMouse;
+                @Zoom.started -= m_Wrapper.m_LookActionsCallbackInterface.OnZoom;
+                @Zoom.performed -= m_Wrapper.m_LookActionsCallbackInterface.OnZoom;
+                @Zoom.canceled -= m_Wrapper.m_LookActionsCallbackInterface.OnZoom;
+            }
+            m_Wrapper.m_LookActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Mouse.started += instance.OnMouse;
+                @Mouse.performed += instance.OnMouse;
+                @Mouse.canceled += instance.OnMouse;
+                @Zoom.started += instance.OnZoom;
+                @Zoom.performed += instance.OnZoom;
+                @Zoom.canceled += instance.OnZoom;
+            }
+        }
+    }
+    public LookActions @Look => new LookActions(this);
     public interface IPlayerInputsActions
     {
         void OnLeftClick(InputAction.CallbackContext context);
         void OnRightClick(InputAction.CallbackContext context);
+        void OnWASD(InputAction.CallbackContext context);
+    }
+    public interface ILookActions
+    {
+        void OnMouse(InputAction.CallbackContext context);
+        void OnZoom(InputAction.CallbackContext context);
     }
 }

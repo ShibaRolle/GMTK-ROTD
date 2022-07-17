@@ -40,4 +40,13 @@ public class InputReader : MonoBehaviour, InputMaster.IPlayerInputsActions
 
         RightClickEvent?.Invoke();
     }
+
+    public void OnWASD(InputAction.CallbackContext context)
+    {
+    }
+
+    public void OnMouseRotation(InputAction.CallbackContext context)
+    {
+        
+    }
 }
