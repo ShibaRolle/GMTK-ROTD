@@ -8,6 +8,8 @@ public class CinemachineVcam : MonoBehaviour
     private InputMaster playerInputActions;
     private int lookspeed;
 
+    private bool moveCam;
+
     private CinemachineVirtualCamera cinemachineVirtualCamera;
 
     Vector2 camLook;
@@ -47,27 +49,35 @@ public class CinemachineVcam : MonoBehaviour
         {
             OnCamZoomInput(ctx);
         };
+        playerInputActions.PlayerInputs.RightClick.started += context =>
+        {
+            RightClick(context);
+        };
     }
 
     private void Update()
     {
-        if (newPosition.x >= 85)
+        if (moveCam)
         {
-            newPosition.x = 85;
-        }
+            if (newPosition.x >= 85)
+            {
+                newPosition.x = 85;
+            }
 
-        if (newPosition.x <= -50)
-        {
-            newPosition.x = -50;
-        }
+            if (newPosition.x <= -50)
+            {
+                newPosition.x = -50;
+            }
 
+
+
+
+
+            newPosition.y += camLook.x;
+            newPosition.x += -camLook.y;
+            transform.localRotation = Quaternion.Euler(newPosition);
+        }
        
-
-        
-
-        newPosition.y += camLook.x;
-        newPosition.x += -camLook.y;
-        transform.localRotation = Quaternion.Euler(newPosition);
 
         HandleZoom();
     }
@@ -81,15 +91,27 @@ public class CinemachineVcam : MonoBehaviour
         camZoom = context.ReadValue<Vector2>();
     }
 
+     void RightClick(InputAction.CallbackContext context)
+    {
+        if (context.performed) 
+        { 
+            moveCam = true; 
+        }
+        else
+        {
+            moveCam = false;
+        }
+        
+    }
     void HandleZoom()
     {
         CinemachineComponentBase componentBase = cinemachineVirtualCamera.GetCinemachineComponent(CinemachineCore.Stage.Body);
  
         camZoom = camZoom.normalized;
 
-        if ((componentBase as CinemachineFramingTransposer).m_CameraDistance >= 4)
+        if ((componentBase as CinemachineFramingTransposer).m_CameraDistance >= 15)
         {
-            (componentBase as CinemachineFramingTransposer).m_CameraDistance = 4;
+            (componentBase as CinemachineFramingTransposer).m_CameraDistance = 15;
         }
         else if((componentBase as CinemachineFramingTransposer).m_CameraDistance <= 2)
         {

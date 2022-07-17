@@ -6,13 +6,18 @@ using UnityEngine.InputSystem;
 public class CameraController : MonoBehaviour
 {
     Vector2 inputAxis;
-    Vector2 rotationVector;
-    Vector3 rotation;
     Vector3 moveDir;
+
+    
     private float moveSpeed = 10f;
-  
+
+    Transform cam;
 
     InputMaster input;
+
+    private float turnSmoothVelocity;
+    private float rotationFactorPerFrame;
+
     private void Awake()
     {
         input = new InputMaster();
@@ -26,13 +31,20 @@ public class CameraController : MonoBehaviour
             OnWASD(context);
         };
     }
+
+    private void Start()
+    {
+        cam = Camera.main.transform;
+        Vector3 camF = cam.forward.normalized;
+        Vector3 camR = cam.right.normalized;
+    }
     // Start is called before the first frame update
     private void Update()
     {
-        moveDir = transform.forward * inputAxis.y + transform.right * inputAxis.x;
 
+        HandleRotation();
         transform.position += moveDir * moveSpeed * Time.deltaTime;
-        transform.eulerAngles += rotation * moveSpeed * Time.deltaTime;
+        
 
     }
 
@@ -46,8 +58,20 @@ public class CameraController : MonoBehaviour
         {
             inputAxis = new Vector2(0,0);
         }
-        
+        moveDir.x = inputAxis.x;
+        moveDir.y = 0f;
+        moveDir.z = inputAxis.y;
 
+    }
+
+    private void HandleRotation()
+    {
+        Vector3 positionToLookAt = new Vector3(inputAxis.x, 0f, inputAxis.y);
+
+        float targetAngle = Mathf.Atan2(positionToLookAt.x, positionToLookAt.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
+        float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, rotationFactorPerFrame);
+        transform.rotation = Quaternion.Euler(0f, angle, 0f);
+        
     }
 
     private void OnEnable()
